@@ -2,6 +2,10 @@ import React, { Component } from 'react';
 import api from '../../services/api'
 
 export default class Main extends Component {
+	// ARMAZENAR ESTADO DO COMPONENTE
+	state = {
+		products: []
+	}
 
 	// PARA FUNÇÕES DO REACT NÃO PRECISA ARROW FUNCTION
 	componentDidMount() {
@@ -11,10 +15,16 @@ export default class Main extends Component {
 	// FEITO DESTA FORMA POIS NÃO SOBRESCREVE O VALOR DO THIS
 	loadProducts = async() => {
 		const response = await api.get('/products');
-		console.log(response.data.docs);
+		this.setState({ products: response.data.docs })
 	}
 
 	render() {
-		return <h1>Hello</h1>;
+		return (
+			<div className="product-list">
+				{this.state.products.map(product => (
+					<h2 key={product._id}>{ product.title }</h2>
+				))}
+			</div>
+		)
 	}
 }
