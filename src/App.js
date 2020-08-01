@@ -1,13 +1,13 @@
 import React from 'react';
 import Header from './components/header/header-component';
+import Routes from './routes'
 import './styles.css';
-import Main from './pages/main/main-component'
 
 // STATELESS COMPONENT
 const App = () => (
 	<div className="App">
 		<Header />
-		<Main />
+		<Routes />
 	</div>
 );
 
