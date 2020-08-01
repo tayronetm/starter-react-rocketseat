@@ -39,3 +39,28 @@
 	background: tomato;
 	color: #fff
 }
+
+.product-list .actions {
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 20px;
+}
+
+.product-list .actions button {
+	padding: 10px;
+	border-radius: 5px;
+	border: 0;
+	background: tomato;
+	color: #fff;
+	font-size: 16px;
+	cursor: pointer;
+}
+
+.product-list .actions button[disabled] {
+	opacity: 0.2;
+	cursor: not-allowed;
+}
+
+.product-list .actions button:hover:not([disabled]) {
+	opacity: 0.7;
+}

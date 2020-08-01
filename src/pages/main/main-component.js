@@ -6,7 +6,9 @@ import './main-styles.css';
 export default class Main extends Component {
 	// ARMAZENAR ESTADO DO COMPONENTE
 	state = {
-		products: []
+		products: [],
+		productInfo: {},
+		currentPage: 1
 	}
 
 	// PARA FUNÇÕES DO REACT NÃO PRECISA ARROW FUNCTION
@@ -15,14 +17,32 @@ export default class Main extends Component {
 	}
 
 	// FEITO DESTA FORMA POIS NÃO SOBRESCREVE O VALOR DO THIS
-	loadProducts = async() => {
-		const response = await api.get('/products');
-		this.setState({ products: response.data.docs })
+	loadProducts = async(page = 1) => {
+		const response = await api.get(`/products?page=${page}`);
+		const { docs, ...productInfo} = response.data;
+		this.setState({ products: docs, productInfo, currentPage: page });
+	}
+
+	prevPage = () => {
+		const { currentPage } = this.state;
+		// VERIFICAR SE ESTÁ NA PRIMEIRA PAGINA
+		if (currentPage === 1) return;
+		const pageNumber = currentPage - 1;
+		this.loadProducts(pageNumber);
+	}
+
+	nextPage = () => {
+		const { currentPage, productInfo } = this.state;
+		// VERIFICAR SE ESTÁ NA ULTIMA PAGINA
+		if (currentPage === productInfo.pages) return;
+		const pageNumber = currentPage + 1;
+		this.loadProducts(pageNumber);
 	}
 
 	render() {
 		// BUSCA A VARIAVEL PRODUCTS DENTRO DO STATE
-		const { products } = this.state;
+		const { products, currentPage } = this.state;
+		const { pages } = this.state.productInfo;
 		return (
 			<div className="product-list">
 				{ products.map(product => (
@@ -32,6 +52,10 @@ export default class Main extends Component {
 						<a href={ product.url }>Acessar</a>
 					</article>
 				))}
+			<div className="actions">
+					<button disabled={ currentPage === 1} onClick={ this.prevPage }>Anterior</button>
+					<button disabled={ currentPage === pages} onClick={ this.nextPage }>Próximo</button>
+			</div>
 			</div>
 		)
 	}
